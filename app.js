@@ -42,6 +42,9 @@ connection.once('open', () => {
 })
 
 app.use('/services', servicesRoute())
+app.get('/', (req, res) => {
+    res.json({ home: "This is working" });
+})
 
 app.listen(port, () => {
     debug(`app listening on port ${port}`);
