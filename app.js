@@ -43,7 +43,7 @@ connection.once('open', () => {
 
 app.use('/services', servicesRoute())
 app.get('/', (req, res) => {
-    res.send("<h1>This is working</h1>");
+    res.json({ working: 'This is working' });
 })
 
 app.listen(port, () => {
