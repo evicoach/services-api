@@ -41,7 +41,7 @@ connection.once('open', () => {
     debug('MongoDB database connection established successfully');
 })
 
-app.use('/services', servicesRoute('we are in'))
+app.use('/services', servicesRoute())
 
 app.listen(port, () => {
     debug(`app listening on port ${port}`);
