@@ -1,0 +1,36 @@
+{
+  "name": "services-api",
+  "version": "1.0.0",
+  "description": "A quick servicing API that helps users get quick services at the comfort of their homes",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "set DEBUG=app, app:* && nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EviCoach/services-api.git"
+  },
+  "keywords": [
+    "services",
+    "quick",
+    "services",
+    "house",
+    "help",
+    "quick",
+    "fix"
+  ],
+  "author": "Engr Evi Owhotemu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EviCoach/services-api/issues"
+  },
+  "homepage": "https://github.com/EviCoach/services-api#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "debug": "^4.1.1",
+    "express": "^4.17.1",
+    "mongoose": "^5.8.4",
+    "morgan": "^1.9.1"
+  }
+}
