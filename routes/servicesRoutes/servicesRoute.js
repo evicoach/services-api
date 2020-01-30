@@ -3,7 +3,7 @@ const servicesRoute = express.Router();
 const Services = require('../../models/service.model')
 const cors = require('cors');
 
-function router(app) {
+function router() {
     
     servicesRoute.route('/').get((req, res) => {
         Services.find()
@@ -12,7 +12,7 @@ function router(app) {
             });
     });
 
-    servicesRoute.route('/').put(cors(), (req, res) => {
+    servicesRoute.route('/').post((req, res) => {
         let service = new Services({
             title: req.body.title,
             description: req.body.description,
