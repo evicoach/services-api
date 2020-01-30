@@ -1,13 +1,15 @@
 const express = require('express');
 const servicesRoute = express.Router();
 const Services = require('../../models/service.model')
+const cors = require('cors');
 
-function router() {
+function router(app) {
+    app.use(cors());
     servicesRoute.route('/').get((req, res) => {
         Services.find()
             .then(services => {
                 res.json(services);
-            })
+            });
     });
 
     servicesRoute.route('/').post((req, res) => {
