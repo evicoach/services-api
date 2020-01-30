@@ -30,7 +30,7 @@ connection.once('open', () => {
     console.log('Mongodb connected successfully')
 })
 
-app.use('/services', servicesRoute(app))
+app.use('/services', cors(), servicesRoute(app))
 
 app.listen(port, () => {
     console.log(`app runing on port ${port}`);
