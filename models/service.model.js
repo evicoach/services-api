@@ -4,15 +4,15 @@ const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
 
 const serviceSchema = new Schema({
-    author: ObjectId,
+    id: ObjectId,
     title: { type: String, required: true },
     imageUrl: { type: String, required: true },
-    shortDescription: Date,
-    favorite: false
+    description: { type: String, required: true },
+    price: { type: String, required: true }
 }, {
     timestamps: true
 });
 
-const Service = mongoose.model('Service', userSchema);
+const Service = mongoose.model('Service', serviceSchema);
 
 module.exports = Service;
