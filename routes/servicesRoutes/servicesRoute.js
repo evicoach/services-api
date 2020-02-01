@@ -13,12 +13,14 @@ function router() {
     });
 
     servicesRoute.route('/').post((req, res) => {
+        console.log('request got here')
         let service = new Services({
             title: req.body.title,
             description: req.body.description,
             price: req.body.price,
-            imageUrl: req.body.imageUrl
+            imageUrls: req.body.imageUrls
         });
+        console.log('still executing');
         service.save()
             .then(service => {
                 res.json(service);

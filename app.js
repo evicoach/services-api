@@ -10,7 +10,7 @@ const app = express();
 
 
 app.use(cors())
-app.use(morgan('tiny'));
+app.use(morgan('combined'));
 app.use(express.json());
 
 const uri = process.env.ATLAS_URI;
@@ -18,14 +18,15 @@ mongoose.connect(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true
-});
+})
+    .catch(err => { console.log('Error connecting to database') });
 
 const connection = mongoose.connection;
 connection.once('open', () => {
     console.log('Mongodb connected successfully')
-})
+}).catch(err => { console.log('Could not connect to database') });
 
-app.use('/services', servicesRoute(app))
+app.use('/services', servicesRoute())
 
 app.listen(port, () => {
     console.log(`app runing on port ${port}`);
