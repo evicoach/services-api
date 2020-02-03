@@ -4,7 +4,7 @@ const Services = require('../../models/service.model')
 const cors = require('cors');
 
 function router() {
-    
+
     servicesRoute.route('/').get((req, res) => {
         Services.find()
             .then(services => {
@@ -29,7 +29,24 @@ function router() {
             .catch(err => {
                 console.log('something went wrong, service could not be saved', err);
             });
-    })
+    });
+
+    servicesRoute.route('/:id').get((req, res) => {
+        const id = req.params.id;
+        Services.findById(id)
+            .then(service => res.json(service));
+    });
+
+    servicesRoute.route('/:id/remove').delete((req, res) => {
+        Services.findByIdAndDelete(req.params.id)
+            .then(response => {
+                res.json(response);
+            });
+    });
+
+    servicesRoute.route('/:id/update').put((req, res) => {
+
+    });
     return servicesRoute;
 }
 
