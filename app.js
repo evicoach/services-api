@@ -1,32 +1,22 @@
 const express = require('express');
 const cors = require('cors');
-const mongoose = require('mongoose')
+const connectToDb = require('./connectDatabase');
 const morgan = require('morgan');
-const servicesRoute = require('./routes/servicesRoutes/servicesRoute')
+const servicesRoute = require('./routes/services/servicesRoute')
+const authRoute = require('./routes/auth/auth')
 require('dotenv').config();
+
 const port = process.env.PORT || 5000;
 
 const app = express();
-
-
 app.use(cors())
 app.use(morgan('combined'));
 app.use(express.json());
 
-const uri = process.env.ATLAS_URI;
-mongoose.connect(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true
-})
-    .catch(err => { console.log('Error connecting to database') });
-
-const connection = mongoose.connection;
-connection.once('open', () => {
-    console.log('Mongodb connected successfully')
-}).catch(err => { console.log('Could not connect to database') });
+connectToDb();
 
 app.use('/services', servicesRoute())
+app.use('/auth', authRoute())
 
 app.listen(port, () => {
     console.log(`app runing on port ${port}`);

@@ -1,10 +1,9 @@
 const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
-const ObjectId = Schema.ObjectId;
 
 const serviceSchema = new Schema({
-    id: ObjectId,
+    owner: { type: String, required: true },
     title: { type: String, required: true },
     imageUrls: { type: Array, required: true },
     description: { type: String, required: true },
