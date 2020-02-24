@@ -3,8 +3,8 @@ const { randomBytes } = require('crypto')
 const UserModel = require('../models/user.model')
 const jwt = require('jsonwebtoken');
 
-exports.SignUp = async (email, password, name) => {
-    console.log('signup called')
+exports.SignUp = async (firstName, lastName, email, password) => {
+    console.log('signup called');
     const salt = randomBytes(32);
     const passwordHashed = await argon2.hash(password, { salt });
 
@@ -12,7 +12,8 @@ exports.SignUp = async (email, password, name) => {
         password: passwordHashed,
         email,
         salt: salt.toString('hex'),
-        name
+        firstName, lastName,
+        role: "admin"
     });
 
     const token = generateJWT(userRecord)
@@ -20,7 +21,8 @@ exports.SignUp = async (email, password, name) => {
     return {
         user: {
             email: userRecord.email,
-            name: userRecord.name,
+            firstName: userRecord.firstName,
+            lastName: userRecord.lastName
         },
         token
     }

@@ -1,4 +1,5 @@
 const express = require('express');
+const { check, validationResult } = require('express-validator')
 const servicesRoute = express.Router();
 const Services = require('../../models/service.model')
 const isAuth = require('../../middlewares/isAuth');
@@ -13,24 +14,34 @@ function router() {
             });
     });
 
-    servicesRoute.route('/').post(isAuth, attacthCurrentUser, (req, res) => {
-        console.log('request got here')
-        let service = new Services({
-            title: req.body.title,
-            description: req.body.description,
-            price: req.body.price,
-            imageUrls: req.body.imageUrls
-        });
-        console.log('still executing');
-        service.save()
-            .then(service => {
-                res.json(service);
-                console.log('document saved successfully');
-            })
-            .catch(err => {
-                console.log('something went wrong, service could not be saved', err);
+    servicesRoute.route('/').post(
+
+        // check('description').isLength({ min: 150, max: 400 }),
+        // check('title').isLength({ min: 4 }),
+        // check('price').isString(),
+        // check('imageUrls').isArray(),
+
+        isAuth, attacthCurrentUser, (req, res) => {
+            // // check for validation errors
+            // const errors = validationResult(req);
+            // if (!errors.isEmpty()) {
+            //     return res.json(errors.array());
+            // }
+            let service = new Services({
+                title: req.body.title,
+                description: req.body.description,
+                price: req.body.price,
+                imageUrls: req.body.imageUrls
             });
-    });
+            service.save()
+                .then(service => {
+                    res.json(service);
+                    console.log('document saved successfully');
+                })
+                .catch(err => {
+                    console.log('something went wrong, service could not be saved', err);
+                });
+        });
 
     servicesRoute.route('/personal-services').get(isAuth, attacthCurrentUser, async (req, res) => {
         // get services where the owner property of the service is equal to the id of the current user
@@ -63,7 +74,25 @@ function router() {
                  * of services. To prevent overwritting the former service photos
                  */
                 Object.keys(req.body.serviceUpdate).forEach((key, index) => {
-                    service[key] = req.body.serviceUpdate[key]
+                    // manual validation done here
+                    if (key === "imageUrls") {
+                        const errors = [];
+                        let valid = req.body.serviceUpdate[key].map(imageUrl => {
+                            // check if the strings are valid urls
+                            const regex = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/gm
+                            return imageUrl.match(regex);
+                        });
+                        valid.forEach(valid => {
+                            if (!valid) {
+                                return errors.push("Invalid image urls")
+                            }
+                        });
+                        if (errors.length > 0) {
+                            res.json(errors);
+                        }
+                    } else {
+                        service[key] = req.body.serviceUpdate[key]
+                    }
                 });
                 // this should be hashed for security and privacy purposes
                 // service.owner = req.currentUser.id;
