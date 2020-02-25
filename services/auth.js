@@ -41,7 +41,8 @@ exports.Login = async (email, password) => {
         return {
             user: {
                 email: userRecord.email,
-                name: userRecord.name
+                firstName: userRecord.firstName,
+                lastName: userRecord.lastName
             },
             token: generateJWT(userRecord)
         }
@@ -58,7 +59,8 @@ exports.LoginAs = async (email) => {
     return {
         user: {
             email: userRecord.email,
-            name: userRecord.name,
+            firstName: userRecord.firstName,
+            lastName: userRecord.lastName
         },
         token: generateJWT(userRecord)
     }
