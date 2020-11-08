@@ -1,59 +1,28 @@
-const { SignUp, Login, LoginAs } = require('../../services/auth')
 const isAuth = require('../../middlewares/isAuth');
 const attachCurrentUser = require('../../middlewares/attachCurrentUser');
 const checkRole = require('../../middlewares/checkRole');
 const express = require('express');
-const { check, validationResult } = require('express-validator');
+const { signUpController, loginController, loginAsController } = require('../../controllers/authController');
+const { check } = require('express-validator');
 const authRoute = express.Router();
 
 function router() {
     // authRoute.post('/login-as', isAuth, attachCurrentUser, checkRole('admin'), (req, res)=>{})
     authRoute.route('/login-as').post(
-        check('email', 'User email is not valid')
-            .isEmail(),
+        [check('email', 'User email is not valid')
+            .isEmail()],
         isAuth,
         attachCurrentUser,
         checkRole('admin'),
-        async (req, res) => {
-            try {
-                const email = req.body.email;
-                const errors = validationResult(req);
-
-                // check for validation errors
-                if (!errors.isEmpty()) {
-                    return res.json(errors.array());
-                }
-                console.log(email);
-                const { user, token } = await LoginAs(email);
-                return res.status(200).json({ user, token }).end();
-            } catch (error) {
-                console.log('Error in login as user: ', error);
-                return res.json(error).status(500).end();
-            }
-        });
+        loginAsController);
 
     authRoute.route('/login').post(
         [
             check('email').isEmail(),
             check('password').isLength({ min: 6 })
                 .withMessage('password must be at least six characters')
-        ], async (req, res) => {
-            try {
-                const email = req.body.email;
-                const password = req.body.password;
-                console.log(email, password);
-
-                // check for validation errors
-                const errors = validationResult(req);
-                if (!errors.isEmpty()) {
-                    return res.json(errors.array());
-                }
-                const { user, token } = await Login(email, password);
-                return res.status(200).json({ user, token }).end();
-            } catch (error) {
-                return res.json(error).status(500).end();
-            }
-        });
+        ],
+         loginController);
 
     authRoute.route('/signup').post(
         [
@@ -74,22 +43,7 @@ function router() {
                 }
                 return true;
             })
-        ], async (req, res) => {
-            try {
-                const { firstName, lastName, email, password } = req.body;
-
-                // check for validation errors
-                const errors = validationResult(req);
-                if (!errors.isEmpty()) {
-                    return res.json(errors.array());
-                }
-                console.log(firstName, lastName, email, password);
-                const { user, token } = await SignUp(firstName, lastName, email, password);
-                return res.json({ user, token }).status(200).end();
-            } catch (error) {
-                return res.json(error).status(500).end();
-            }
-        });
+        ], signUpController);
 
     return authRoute;
 }

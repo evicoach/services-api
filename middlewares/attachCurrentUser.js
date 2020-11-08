@@ -1,10 +1,9 @@
 const UserModel = require('../models/user.model');
-// const mongoose = require('mon')
 
 module.exports = async (req, res, next) => {
     try {
         const decodedUser = req.token.data; // get decoded token
-        console.log(decodedUser)
+        console.log(decodedUser);
         const user = await UserModel.findOne({ _id: decodedUser._id });
         if (!user) {
             res.status(401).end('User not found') // user not found
