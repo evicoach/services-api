@@ -31,17 +31,17 @@ const FixaSchema = new mongoose.Schema({
 });
 
 // Geocode & create location
-FixaSchema.pre('save', async function(next){
-    const loc = await geocoder.geocode(this.address);
-    console.log(loc);
-    this.location = {
-        type: 'Point', 
-        coordinates: [loc[0].longitude, loc[0].latitude],
-        formattedAddress: loc[0].formattedAddress,
-    } // end of location object
+// FixaSchema.pre('save', async function(next){
+//     const loc = await geocoder.geocode(this.address);
+//     console.log(loc);
+//     this.location = {
+//         type: 'Point', 
+//         coordinates: [loc[0].longitude, loc[0].latitude],
+//         formattedAddress: loc[0].formattedAddress,
+//     } // end of location object
 
-    this.address = undefined;
-    next();
-});
+//     this.address = undefined;
+//     next();
+// });
 
 module.exports = mongoose.model('Fixa', FixaSchema);
