@@ -1,18 +1,22 @@
 const mongoose = require('mongoose');
 const Fixa = require('../../models/fixa');
-module.exports = async (req, res, next)=>{
-    try{
+module.exports = async (req, res, next) => {
+    try {
         let fixa = new Fixa({
             fixaId: mongoose.Types.ObjectId(),
-             address: req.body.address,
-            location:{
+            name: req.body.name,
+            title: req.body.title,
+            image_urls: req.body.image_urls,
+            address: req.body.address,
+            description: req.body.description,
+            location: {
                 type: 'Point',
-                coordinates:[req.body.longitude, req.body.latitude],
+                coordinates: [req.body.longitude, req.body.latitude],
                 // any other data can be added to the location
             }
         });
 
-        res.json({data: fixa});
+        res.json({ data: fixa });
 
 
         // console.log(req.body);
@@ -21,11 +25,11 @@ module.exports = async (req, res, next)=>{
         //     success: true,
         //     data: fixa
         // })
-    }catch(err){
+    } catch (err) {
         console.log(err);
-        if(err.code===11000){
-            return res.status(400).json({error: 'This fixer already exist'})
+        if (err.code === 11000) {
+            return res.status(400).json({ error: 'This fixer already exist' })
         }
-        res.status(200).json({error: 'Server error'});
+        res.status(200).json({ error: 'Server error' });
     }
 };
