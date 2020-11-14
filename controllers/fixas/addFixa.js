@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Fixa = require('../../models/Fixa');
+const Fixa = require('../../models/fixa');
 module.exports = async (req, res, next)=>{
     try{
         let fixa = new Fixa({

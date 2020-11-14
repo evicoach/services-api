@@ -4,13 +4,10 @@ const cors = require('cors');
 const connectToDb = require('./connectDatabase');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
-const servicesRoute = require('./routes/services/servicesRoute');
 const fixasRoute = require('./routes/fixas/fixasRoute');
 const authRoute = require('./routes/auth/auth');
+const { FIXAS, AUTH, USERS } = require('./constants/routes');
 
-// const redis = require('redis');
-// const client = redis.createClient();
-// const geo = require('georedis').initialize(client);
 
 dotenv.config();
 
@@ -31,9 +28,8 @@ app.use(express.json()); // because we're going to be sending json data
 
 connectToDb();
 
-app.use('/services', servicesRoute());
-app.use('/auth', authRoute());
-app.use('/fixas', fixasRoute());
+app.use(AUTH, authRoute());
+app.use(FIXAS, fixasRoute());
 
 app.listen(port, () => {
     console.log(`app runing on port ${port}`);

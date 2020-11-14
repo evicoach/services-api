@@ -9,6 +9,10 @@ const FixaSchema = new mongoose.Schema({
         unique: true,
         maxlength: [10, 'Fixa ID must be less than 10 characters'],
     },
+    name: { type: String, required: true },
+    title: { type: String, required: true },
+    description: { type: String, required: true },
+    image_urls: { type: Array, required: true },
     address: {
         type: String,
         required: true
@@ -26,9 +30,11 @@ const FixaSchema = new mongoose.Schema({
     },
     createdAt: {
         type: Date,
-        default: Date.now
+        default: Date.now()
     }
-});
+}, {timestamps: true});
+
+FixaSchema.index({ location: "2dsphere" });
 
 // Geocode & create location
 // FixaSchema.pre('save', async function(next){
