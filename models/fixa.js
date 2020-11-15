@@ -34,8 +34,6 @@ const FixaSchema = new mongoose.Schema({
     }
 }, {timestamps: true});
 
-FixaSchema.index({ location: "2dsphere" });
-
 // Geocode & create location
 // FixaSchema.pre('save', async function(next){
 //     const loc = await geocoder.geocode(this.address);
