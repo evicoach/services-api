@@ -10,5 +10,5 @@ module.exports = jwt({
     secret: "eViS3kritKiy", // Has to be the same that we used to sign the JWT
     userProperty: 'token', // this is where the next middleware can find the encoded data generated in services/auth:generateToken
     getToken: getTokenFromHeader, // A function to get the auth token from the request
-    algorithms: ['RS256']
+    algorithms:['sha1', 'RS256', 'HS256']
 });

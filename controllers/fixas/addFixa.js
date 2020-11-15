@@ -16,6 +16,13 @@ module.exports = async (req, res, next) => {
             }
         });
 
+        fixa.save((err, message)=>{
+            if(err){
+                console.log(err);
+            }
+            console.log(message);
+        });
+
         res.json({ data: fixa });
 
 

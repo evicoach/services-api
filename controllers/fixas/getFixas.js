@@ -1,3 +1,4 @@
+const Fixa = require('../../models/fixa');
 module.exports = async (req, res, next)=>{
     try{
         const fixas = await Fixa.find();

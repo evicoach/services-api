@@ -7,7 +7,7 @@ const FixaSchema = new mongoose.Schema({
         required: [true, 'Please add a fixa ID'],
         trim: true,
         unique: true,
-        maxlength: [10, 'Fixa ID must be less than 10 characters'],
+        // maxlength: [10, 'Fixa ID must be less than 10 characters'],
     },
     name: { type: String, required: true },
     title: { type: String, required: true },
