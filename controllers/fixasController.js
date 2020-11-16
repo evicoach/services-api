@@ -1,4 +1,3 @@
-const Fixa = require('../models/fixa');
 const addFixa = require('./fixas/addFixa');
 const deleteFixa = require('./fixas/deleteFixa');
 const updateFixa = require('./fixas/updateFixa');

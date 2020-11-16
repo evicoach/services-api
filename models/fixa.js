@@ -26,13 +26,15 @@ const FixaSchema = new mongoose.Schema({
             type: [Number],
             index: '2dsphere'
         },
-        formattedAddress: String
     },
     createdAt: {
         type: Date,
         default: Date.now()
     }
 }, {timestamps: true});
+
+
+
 
 // Geocode & create location
 // FixaSchema.pre('save', async function(next){

@@ -12,11 +12,10 @@ module.exports = async (req, res, next) => {
             location: {
                 type: 'Point',
                 coordinates: [req.body.longitude, req.body.latitude],
-                // any other data can be added to the location
             }
         });
 
-        fixa.save((err, message)=>{
+        await fixa.save((err, message)=>{
             if(err){
                 console.log(err);
             }
@@ -25,13 +24,6 @@ module.exports = async (req, res, next) => {
 
         res.json({ data: fixa });
 
-
-        // console.log(req.body);
-        // const fixa = await Fixa.create(req.body);
-        // return res.status(200).json({
-        //     success: true,
-        //     data: fixa
-        // })
     } catch (err) {
         console.log(err);
         if (err.code === 11000) {
