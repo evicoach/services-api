@@ -1,26 +1,42 @@
-const { json } = require('express');
+const { json, text, response } = require('express');
 const Fixa = require('../../models/fixa');
+const isFixasEqual = require('../../utils/isFixasEqual');
 module.exports = async (req, res, next) => {
 
-    let query = {}
+
+    /**
+     * First do text search
+     * Then do geo search
+     * Filter the two
+     * And get the ones that exists in both
+     */
     Fixa.find({ $text: { $search: req.query.keywords } })
         .then((docs) => {
-            console.log('it is working here', docs);
-            query._id = { $in: docs.map(doc => doc._id) };
-            query.$nearSphere = {
-                near: {
+            Fixa.aggregate([
+                {
+                  $geoNear: {
+                     near: {
                     type: "Point",
-                    coordinates: [
-                        parseFloat(req.query.lng), parseFloat(req.query.lat)
-                    ]
-                },
-                key: 'location',
-            }
+                     coordinates: [ parseFloat(req.query.lng), parseFloat(req.query.lat)] },
+                     key: 'location',
+                     distanceField: "dist.calculated",
+                    //  maxDistance: req.query.maxDistance?req.query.maxDistance: 2000,
+                     includeLocs: "dist.location",
+                     spherical: true
+                  }
+                }
+             ]).then((results)=>{
 
+                let nearbySearchedFixas = [];
+                results.forEach((geoResult, index)=>{
+                    docs.forEach((textSearchResult, index)=>{
+                        if(isFixasEqual(geoResult, textSearchResult)){
+                            nearbySearchedFixas.push(geoResult);
+                        }
+                    });
+                });
+                res.json(nearbySearchedFixas);
+            });
         }
         );
-
-    Fixa.find(query).then((docs) => {
-        res.json(docs)
-    });
 }
